@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <arpa/inet.h>
 #include <unistd.h>
 int main(){
@@ -49,6 +50,16 @@ int main(){
     }else{
         std::cout<<buffer;
     }
+    //6.返回并显示给浏览器
+    std::stringstream ss;
+    ss << "HTTP/1.1 200 OK\r\n"
+       << "Content-Type: text/plain\r\n"
+       << "Content-Length: "<<strlen(buffer)<<"\r\n"
+       << "\r\n"
+       << buffer;
+    std::cout<<ss.str();
+    int lent=ss.str().size();
+    send(cfd,ss.str().c_str(),lent,0);
     close(cfd);
     close(sfd);
     return 0;
